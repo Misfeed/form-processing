@@ -25,7 +25,7 @@
     <div id="output">
       <p>The following is a demonstration of a form that can be filled out and when data is entered, the data can be seen on the page.</p>
       <p>This page demonstrates data processing of query string data using client side JavaScript.
-        Upon submission, the shipping info is displayed and title case is applied to the Shipping Info.</p>  
+        Upon submission, the shipping info is displayed and title case is applied to First Name, Last Name, Address and City.</p>  
     <form method="get" action="" class="main-form">
       <div>
         <label for="FirstName">First Name</label><br>
@@ -106,17 +106,41 @@
   <script src="js/main.js"></script> 
   <script>
 
-    const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
+    function titleCase(str){
+          str = str.split(" ");
 
-    if(queryString.length > 0){//data submitted
-      let myOutput = `<div id="container">`;
+      for(let x = 0; x<str.length; x++){
+      //alert(str[x]);
+      str[x]=str[x].charAt(0).toUpperCase() + str[x].slice(1).toLowerCase();
+      }
 
-      urlParams.forEach(function(value,key){
+      str = str.join(" ");
 
-        key = key.split("_").join(" ");
+      return str;
+     }
+
+      const queryString = window.location.search;
+     const urlParams = new URLSearchParams(queryString);
+
+      if(queryString.length > 0){//data submitted
+        let myOutput = `<div id="container">`;
+
+       urlParams.forEach(function(value,key){
+          key = key.split("_").join(" ");
+       
+          switch(key){
+            case "First Name":
+            case "Last Name":
+            case "City":
+            case "Address":
+
+            value = titleCase(value);
+            break; 
+        }
+
         myOutput += `<p>${key}: ${value}</p>`;
       });
+
       myOutput += `<p><a href="index.html">CLEAR</a></p>`; 
       myOutput += `</div>`;
       document.querySelector("#output").innerHTML = myOutput;
